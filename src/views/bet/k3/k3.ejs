@@ -1,0 +1,135 @@
+<html lang="en" translate="no" data-dpr="1" dir="ltr" style="font-size: 43.52px">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.png" />
+    <meta name="google" content="notranslate" />
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <title>Taaz 777</title>
+
+    <link rel="stylesheet" href="/assets/css/modules-b642e9bc.css">
+    <link rel="stylesheet" href="/assets/css/page-activity-15aec14d.css">
+    <link rel="stylesheet" href="/assets/css/page-home-38001cf0.css">
+    <link rel="stylesheet" href="/assets/css/page-login-4bd8b079.css">
+    <link rel="stylesheet" href="/assets/css/index-688293f8.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js"
+        integrity="sha512-JSCFHhKDilTRRXe9ak/FJ28dcpOJxzQaCd3Xg8MyF6XFjODhy/YMCM8HW0TFDckNHWUewW+kfvhin43hKtJxAw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"
+        integrity="sha384-fKnu0iswBIqkjxrhQCTZ7qlLHOFEgNkRmK2vaO/LbTZSXdJfAu6ewRBdwHPhBo/H"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.14.0/jquery-ui.min.js"
+        integrity="sha512-MlEyuwT6VkRXExjj8CdBKNgd+e2H+aYZOCUaCrt9KRk6MlZDOs91V1yK22rwm8aCIsb5Ec1euL8f0g58RKT/Pg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script defer src="/js/client.js"></script>
+
+
+    <script defer src="/k3/js/logic.js"></script>
+
+</head>
+
+<body style="font-size: 12px">
+
+    <%- include('element/svg_sets'); -%>
+
+        <div id="app" data-v-app="">
+            <%- include('element/loading'); -%>
+
+
+                <div data-v-d024c659="" class="K3__C"
+                    style="--f13b4d11-currentFontFamily: 'Roboto', 'Inter',sans-serif;">
+                    <%- include('element/navbar'); -%>
+                        <%- include('element/wallet'); -%>
+                            <%- include('element/marquee'); -%>
+                                <%- include('element/tab_menu'); -%>
+                                    <%- include('element/info_summary'); -%>
+                                        <%- include('element/bet_options'); -%>
+                                            <%- include('element/info_main'); -%>
+                                                <!-- 
+                                                <div data-v-3e71d3da="" data-v-d024c659="" class="dialog inactive">
+                                                    <div data-v-3e71d3da="" class="dialog__container" role="dialog"
+                                                        tabindex="0">
+                                                        <div data-v-3e71d3da="" class="dialog__container-img">
+                                                            <img data-v-3e71d3da="" class="" alt=""
+                                                            data-origin="/assets/png/tip-2298bb83.png"
+                                                            src="/assets/png/tip-2298bb83.png" />
+                                                        </div>
+                                                        <div data-v-3e71d3da="" class="dialog__container-title">
+                                                            <h1 data-v-3e71d3da=""></h1>
+                                                        </div>
+                                                        <div data-v-3e71d3da="" class="dialog__container-content">
+                                                            <div data-v-d024c659=""></div>
+                                                        </div>
+                                                        <div data-v-3e71d3da="" class="dialog__container-footer">
+                                                            <button data-v-3e71d3da="">Confirm</button><button
+                                                            data-v-3e71d3da="">Cancel</button>
+                                                        </div>
+                                                    </div>
+                                                    <div data-v-3e71d3da="" class="dialog__outside"></div>
+                                                </div> 
+                                                -->
+
+
+                                                <audio id="voice1">
+                                                    <source src="/assets/mp3/di1-0f3d86cb.mp3" type="audio/mpeg" />
+                                                </audio><audio id="voice2">
+                                                    <source src="/assets/mp3/di2-ad9aa8fb.mp3" type="audio/mpeg" />
+                                                </audio>
+                </div>
+                <div class="customer" id="customerId"
+                    onclick="if($(this).data('dragging')) return; location.href='/support'"
+                    style="--f13b4d11-currentFontFamily: 'Roboto', 'Inter', sans-serif; --f6a705e1-currentFontFamily: bahnschrift;">
+                    <img class="" data-origin="/assets/png/icon_sevce-8a1f5628.png"
+                        src="/assets/png/icon_sevice-8a1f5628.png">
+                </div>
+                <script>
+                    $("#customerId").draggable({
+                        start: function (event, ui) {
+                            $("#customerId").css("cursor", "grabbing")
+                            $(this).data('dragging', true);
+                        },
+                        drag: function () {
+                            $("#customerId").css("cursor", "grabbing")
+                        },
+                        stop: function (event, ui) {
+                            $("#customerId")
+                            $("#customerId").css("cursor", "initial")
+                            setTimeout(function () {
+                                $(event.target).data('dragging', false);
+                            }, 1);
+                        }
+                    })
+                </script>
+                <%- include('element/result_popup'); -%>
+        </div>
+
+        <div data-v-app=""></div>
+        <div class="van-overlay" style="z-index: 2001; display: none;"></div>
+        <div role="dialog" tabindex="0"
+            class="van-popup van-popup--center van-toast van-toast--middle van-toast--loading"
+            style="z-index: 2001; display: none;">
+            <div class="van-loading van-loading--circular van-toast__loading" aria-live="polite" aria-busy="true"><span
+                    class="van-loading__spinner van-loading__spinner--circular"><svg class="van-loading__circular"
+                        viewBox="25 25 50 50">
+                        <circle cx="50" cy="50" r="20" fill="none"></circle>
+                    </svg></span><!----></div><!----><!---->
+
+        </div>
+
+
+        <div role="dialog" tabindex="0"
+            class="van-popup van-popup--center van-toast van-toast--middle van-toast--break-word van-toast--fail"
+            style="z-index: 2007; display:none;" id="alert_message"><i
+                class="van-badge__wrapper van-icon van-icon-success van-toast__icon"><!----><!----><!----></i>
+            <div class="van-toast__text">Insufficient balance</div><!---->
+        </div>
+
+
+
+</body>
+
+</html>

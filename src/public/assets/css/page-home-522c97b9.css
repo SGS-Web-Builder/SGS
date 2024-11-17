@@ -29844,7 +29844,7 @@ html:lang(ar) .NorthRule__C-Content .borderTopStyle span[data-v-7bb580e6]:first-
     width: calc(100% - .69333rem);
     height: 2.66667rem;
     margin: .48rem auto 0;
-    background-image: url(/assets/png/wingoissue-50228a79.png);
+    background: linear-gradient(90deg, #3BAF4C 0%, #00D08A 100%);
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-position: .01333rem center;
@@ -31768,7 +31768,7 @@ html:lang(ar) .WinGo__C-head-more[data-v-5d71c3fd] {
     width: calc(100% - .69333rem);
     height: 5rem;
     margin: .48rem auto 0;
-    background-image: url(/assets/png/trxbg-c5f4f0f4.png);
+    background-image: linear-gradient(90deg, #3BAF4C 0%, #00D08A 100%);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: .01333rem center;

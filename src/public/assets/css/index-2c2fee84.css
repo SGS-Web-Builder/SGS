@@ -100,7 +100,7 @@ input[type=number]::-webkit-outer-spin-button {
     height: 1.73333rem;
     padding-block: 0 .13333rem;
     font-size: .29333rem;
-    background: #1a2c38;
+    background: #fff;
     z-index: 100
 }
 
@@ -1053,7 +1053,7 @@ textarea {
     width: 100%;
     line-height: 1.06667rem;
     border-radius: .13333rem;
-    background: #1a2c38;
+    background: var(--darkBg, var(--bg_color_L2))
 }
 
 .ar-searchbar__selector>div:first-of-type {
@@ -1264,7 +1264,7 @@ textarea {
 
 .content {
     padding: 0 .32rem;
-    background: #213743 !important
+    background: var(--bg_color_L1) !important
 }
 
 @font-face {
@@ -1283,7 +1283,7 @@ textarea {
 }
 
 #app {
-    background: #213743;
+    background: var(--bg_color_L1)
 }
 
 .popup {
@@ -1506,49 +1506,52 @@ textarea {
 }
 
 :root {
-    --main-color: #61a9ff;
-    --main_gradient-color: linear-gradient(90deg, #2AAAF3 0%, #2979F2 100%);
-    --main_gradient-color2: linear-gradient(180deg, #2AAAF3 0%, #2979F2 100%);
-    --norm_red-color: #D23838;
-    --norm_green-color: #17B15E;
-    --norm_secondary-color: #DD9138;
-    --norm_Purple-color: #9B48DB;
-    --norm_bule-color: #5088D3;
-    --button_dis_color: #454456;
-    --text_color_L1: #F0F1F5;
-    --text_color_L2: #ACAFC2;
-    --text_color_L3: #757BA6;
-    --text_color_L4: #F0F1F5;
-    --bg_color_L1: #22275B;
-    --bg_color_L2: #2B3270;
-    --bg_color_L3: #374992;
-    --Dividing-line_color: #374992;
-    --sheet_nva_color: #374992;
-    --sheet_detail_bg_color: #2B3270;
-    --icon1: rgba(7, 221, 209, .6);
-    --icon2: rgba(7, 221, 209, .3);
+    --main-color: #1AB266;
+    --main_gradient-color: linear-gradient(90deg, #3BAF4C 0%, #00D08A 100%);
+    --main_gradient-color2: linear-gradient(180deg, #49C755 0%, #0F9957 100%);
+    --light-main_gradient-color: var(--main_gradient-color);
+    --text_white: #fff;
+    --light-bg_white: #fff;
+    --light-main-color: var(--main-color);
+    --norm_red-color: #FB5B5B;
+    --norm_green-color: #18b660;
+    --norm_secondary-color: #FEAA57;
+    --norm_Purple-color: #C86EFF;
+    --norm_bule-color: #6EA8F4;
+    --button_dis_color: linear-gradient(90deg, #CCCEDC 15.38%, #CDCFDD 98.73%);
+    --text_color_L1: #020D37;
+    --text_color_L2: #768096;
+    --text_color_L3: #B6BCC8;
+    --text_color_L4: #FFF;
+    --bg_color_L1: #F2F2F1;
+    --bg_color_L2: #FFF;
+    --bg_color_L3: #F6F6F6;
+    --Dividing-line_color: #E1E1E1;
+    --sheet_nva_color: var(--main-color);
+    --sheet_detail_bg_color: var(--bg_color_L3);
+    --pop_bg-color: linear-gradient(180deg, #13BF77 13.44%, #4CCC77 86.56%);
+    --iconSecondary: rgba(24, 182, 96,.3);
+    --icon2: rgba(7, 221, 209,.3);
+    --tab1: #21D9CC;
+    --tab2: #3BAF4C;
     --van-sidebar-text-color: var(--main-color);
     --van-picker-background: var(--bg_color_L2);
-    --van-picker-mask-color: linear-gradient(180deg, rgba(32, 29, 43, .9), rgba(32, 29, 43, .4)), linear-gradient(0deg, rgba(32, 29, 43, .9), rgba(32, 29, 43, .4));
     --van-picker-option-text-color: var(--text_color_L2);
     --van-picker-confirm-action-color: var(--main-color);
-    --van-popup-background: #201D2B;
     --van-checkbox-checked-icon-color: var(--main-color);
     --van-checkbox-label-color: var(--text_color_L2);
     --van-field-input-text-color: var(--text_color_L1);
     --van-radio-checked-icon-color: var(--main-color);
-    --van-grid-item-content-background: var(--bg_color_L1) --van-text-color: var(--text_color_L1);
+    --van-grid-item-content-background: var(--bg_color_L1);
+    --van-text-color: var(--text_color_L1);
     --van-dialog-background: var(--bg_color_L2);
     --van-circle-color: var(--main-color);
-    --van-calendar-background: var(--bg_color_L1);
-    --van-calendar-range-edge-background: var(--main-color);
-    --van-radio-label-color: var(--text_color_L2);
-    --van-cell-background: var(--bg_color_L2);
-    --van-button-default-background: var(--main_gradient-color);
-    --van-popover-light-background: var(--bg_color_L2);
+    --van-slider-active-background: var(--main-color);
+    --van-slider-inactive-background: var(--bg_color_L1);
     --van-circle-layer-color: var(--bg_color_L3);
-    --van-dialog-confirm-button-text-color: var(--text_color_L1);
-    --van-dialog-has-title-message-text-color: var(--text_color_L2)
+    --van-calendar-range-edge-background: var(--main-color);
+    --van-button-primary-background: var(--main_gradient-color);
+    --van-button-primary-border-color: var(--main-color)
 }
 
 :root [class*=van-hairline]:after {
@@ -1587,7 +1590,7 @@ textarea {
 }
 
 .navbar.activity .navbar-fixed[data-v-12a80a3e] {
-    background: #1a2c38
+    background: var(--main_gradient-color)
 }
 
 .navbar.activity .navbar-fixed .navbar__content-left .van-icon[data-v-12a80a3e] {
@@ -1604,7 +1607,7 @@ textarea {
 }
 
 .navbar.main .navbar-fixed[data-v-12a80a3e] {
-    background: #1a2c38;
+    background: var(--light-main_gradient-color, var(--bg_color_L2))
 }
 
 .navbar.main .navbar-fixed .navbar__content-left .van-icon[data-v-12a80a3e],
@@ -1622,7 +1625,7 @@ textarea {
     -webkit-user-select: none;
     user-select: none;
     z-index: 100;
-    background: #1a2c38;
+    background: var(--bg_color_L2);
     color: var(--text_color_L1)
 }
 
@@ -1984,7 +1987,7 @@ html:lang(ar) .shape-2[data-v-647954c7] {
     font-weight: 700;
     font-size: .4rem
 }
-.navbar.main .navbar-fixed[data-v-12a80a3e] {
+
 .cg-default.van-button .van-button__icon[data-v-fa757a88] {
     height: 100%;
     display: -webkit-box;

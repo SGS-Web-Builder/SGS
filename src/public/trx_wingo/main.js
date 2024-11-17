@@ -136,9 +136,9 @@ function countDownTimer({ GAME_TYPE_ID }) {
   }, 0);
 }
 
-$(document).ready(function () {
+window.onload = function () {
   countDownTimer({ GAME_TYPE_ID });
-});
+};
 
 const selectActiveClockByGameType = (GAME_TYPE_ID) => {
   GAME_TYPE_ID = `${GAME_TYPE_ID}`;
@@ -166,7 +166,7 @@ fetch("/api/webapi/GetUserInfo")
       unsetCookie();
       return false;
     }
-    $("#balance_amount").text(`₹ ${formatIndianNumber(data.data.money_user)} `);
+    $("#balance_amount").text(`₹ ${data.data.money_user}.00 `);
   });
 
 $(".reload_money").click(function (e) {
@@ -182,9 +182,7 @@ $(".reload_money").click(function (e) {
         unsetCookie();
         return false;
       }
-      $("#balance_amount").text(
-        `₹ ${formatIndianNumber(data.data.money_user)} `,
-      );
+      $("#balance_amount").text(`₹ ${data.data.money_user}.00 `);
     });
 });
 
@@ -200,27 +198,23 @@ function drawChartLineInCanvas(topBoxNumber, bottomBoxNumber, canvasId) {
 }
 
 function selectActiveClock(currentTime) {
-  $(".min_t_30").removeClass("active");
-  $(".min_t_1").removeClass("active");
-  $(".min_t_3").removeClass("active");
-  $(".min_t_5").removeClass("active");
-  $(".min_t_10").removeClass("active");
+  document.querySelector(".min_t_1").classList.remove("active");
+  document.querySelector(".min_t_3").classList.remove("active");
+  document.querySelector(".min_t_5").classList.remove("active");
+  document.querySelector(".min_t_10").classList.remove("active");
 
   switch (parseInt(currentTime)) {
-    case 30:
-      $(".min_t_30").addClass("active");
-      break;
     case 1:
-      $(".min_t_1").addClass("active");
+      document.querySelector(".min_t_1").classList.add("active");
       break;
     case 3:
-      $(".min_t_3").addClass("active");
+      document.querySelector(".min_t_3").classList.add("active");
       break;
     case 5:
-      $(".min_t_5").addClass("active");
+      document.querySelector(".min_t_5").classList.add("active");
       break;
     case 10:
-      $(".min_t_10").addClass("active");
+      document.querySelector(".min_t_10").classList.add("active");
       break;
     default:
       throw new Error("Invalid time");
@@ -240,11 +234,11 @@ const getGameResultNumbers = (hash) => {
 
     if (isNumber) {
       resultHtmlList.push(
-        `<p data-v-3c1bee29="" class="num${hashItem} prize${hashItem}"></p>`,
+        `<p data-v-04b8bdc8="" class="num${hashItem} prize${hashItem}"></p>`,
       );
     } else {
       resultHtmlList.push(
-        `<div data-v-3c1bee29="" class="num${hashItem.toUpperCase()}"></div>`,
+        `<div data-v-04b8bdc8="" class="num${hashItem.toUpperCase()}"></div>`,
       );
     }
   }
@@ -293,7 +287,7 @@ const displayResultHandler = ({ status, amount, period, result }) => {
   );
 
   if (status === STATUS_MAP.WIN) {
-    $("#popup_win_rupees_display").html(`₹${formatIndianNumber(amount)}`);
+    $("#popup_win_rupees_display").html(`₹${amount}.00`);
     $("#popup_greeting_display").html(`Congratulations`);
     $("#popup_background").removeClass("isL");
     $("#popup_greeting_display").removeClass("isL");
@@ -337,18 +331,18 @@ function showGameHistoryData(list_orders) {
     .map((list_order) => {
       const isBig = parseInt(list_order.result) >= 5;
       return `
-         <div data-v-7a795a91="" class="van-row">
-            <div data-v-7a795a91="" class="van-col van-col--6">${list_order.period.slice(0, 2)}**${list_order.period.slice(list_order.period.length - 4, list_order.period.length)}</div>
-            <div data-v-7a795a91="" class="van-col van-col--4">
+         <div data-v-a9b34bec="" class="van-row">
+            <div data-v-a9b34bec="" class="van-col van-col--6">${list_order.period.slice(0, 2)}**${list_order.period.slice(list_order.period.length - 4, list_order.period.length)}</div>
+            <div data-v-a9b34bec="" class="van-col van-col--4">
                ${list_order.block_id} 
-               <div data-v-7a795a91="" class="Binquire" onclick="location.href = '/trx_block?block_id=${list_order.block_id}'"></div>
+               <div data-v-a9b34bec="" class="Binquire" onclick="location.href = '/trx_block?block_id=${list_order.block_id}'"></div>
             </div>
-            <div data-v-7a795a91="" class="van-col van-col--5">${formateTimeHHmmss(list_order.block_time)}</div>
-            <div data-v-7a795a91="" class="van-col van-col--4">** ${list_order.hash.slice(list_order.hash.length - 4, list_order.hash.length)} </div>
-            <div data-v-7a795a91="" class="van-col van-col--5">
-                <div data-v-7a795a91="" class="numberC">
-                    <div data-v-7a795a91="" class="number num${list_order.result}">${list_order.result}</div>
-                    <div data-v-7a795a91="" class="${isBig ? "big" : "small"}">${isBig ? "B" : "S"}</div>
+            <div data-v-a9b34bec="" class="van-col van-col--5">${formateTimeHHmmss(list_order.block_time)}</div>
+            <div data-v-a9b34bec="" class="van-col van-col--4">** ${list_order.hash.slice(list_order.hash.length - 4, list_order.hash.length)} </div>
+            <div data-v-a9b34bec="" class="van-col van-col--5">
+                <div data-v-a9b34bec="" class="numberC">
+                    <div data-v-a9b34bec="" class="number num${list_order.result}">${list_order.result}</div>
+                    <div data-v-a9b34bec="" class="${isBig ? "big" : "small"}">${isBig ? "B" : "S"}</div>
                 </div>
             </div>
          </div>
@@ -380,18 +374,18 @@ function showTrendData(list_orders) {
       const isLastOrder = index === list_orders.length - 1;
 
       return `
-   <div data-v-d485a39d="" issuenumber="${order.period}" number="${order.result}" colour="${isBig ? "red" : "green"}" rowid="${index}">
-      <div data-v-d485a39d="" class="van-row">
-         <div data-v-d485a39d="" class="van-col van-col--8">
-            <div data-v-d485a39d="" class="Trend__C-body2-IssueNumber">${order.period}</div>
+   <div data-v-54016b1c="" issuenumber="${order.period}" number="${order.result}" colour="${isBig ? "red" : "green"}" rowid="${index}">
+      <div data-v-54016b1c="" class="van-row">
+         <div data-v-54016b1c="" class="van-col van-col--8">
+            <div data-v-54016b1c="" class="Trend__C-body2-IssueNumber">${order.period}</div>
          </div>
-         <div data-v-d485a39d="" class="van-col van-col--16">
-            <div data-v-d485a39d="" class="Trend__C-body2-Num">
-               <canvas data-v-d485a39d="" canvas="" id="myCanvas${index}" class="line-canvas"></canvas>
+         <div data-v-54016b1c="" class="van-col van-col--16">
+            <div data-v-54016b1c="" class="Trend__C-body2-Num">
+               <canvas data-v-54016b1c="" canvas="" id="myCanvas${index}" class="line-canvas"></canvas>
                ${NumberList.map((number, index) => {
-                 return `<div data-v-d485a39d="" class="Trend__C-body2-Num-item ${order.result == number ? `action${number}` : ""}">${number}</div>`;
+                 return `<div data-v-54016b1c="" class="Trend__C-body2-Num-item ${order.result == number ? `action${number}` : ""}">${number}</div>`;
                }).join(" ")}
-               <div data-v-d485a39d="" class="Trend__C-body2-Num-BS ${isBig ? "isB" : ""}">${isBig ? "B" : "S"}</div>
+               <div data-v-54016b1c="" class="Trend__C-body2-Num-BS ${isBig ? "isB" : ""}">${isBig ? "B" : "S"}</div>
             </div>
          </div>
        ${
@@ -483,103 +477,73 @@ function showMyBetsData(list_orders) {
       }
 
       return `
-         <div data-v-2faec5cb="" class="MyGameRecordList__C-item" index="${index}" onclick="openGameBetDetails(${index})">
-            <div data-v-2faec5cb="" class="MyGameRecordList__C-item-l MyGameRecordList__C-item-${color}" >${checkJoin}</div>
-            <div data-v-2faec5cb="" class="MyGameRecordList__C-item-m">
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-item-m-top">${list_order.stage}</div>
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-item-m-bottom">${timerJoin(list_order.time)}</div>
-            </div>
-            ${
-              list_order.status === 0
-                ? ""
-                : `<div data-v-2faec5cb="" class="MyGameRecordList__C-item-r ${list_order.status == 1 ? "success" : ""}">
-                <div data-v-2faec5cb="" class="${list_order.status === 1 ? "success" : ""}">${list_order.status == 1 ? "Success" : list_order.status == 2 ? "Failed" : ""}</div>
-                <span data-v-2faec5cb="">${
-                  // list_order.status == 1 && list_order.bet == 0
-                  //    ? '<span data-v-a9660e98="" class="success"> + ₹' + list_order.money * 4.5 + " </span>"
-                  //    : list_order.status == 1 && list_order.bet == 5
-                  //      ? '<span data-v-a9660e98="" class="success"> + ₹' + list_order.money * 4.5 + " </span>"
-                  //      : list_order.status == 1 && list_order.result == 0 && list_order.bet == "d"
-                  //        ? '<span data-v-a9660e98="" class="success"> + ₹' + list_order.money * 1.5 + " </span>"
-                  //        : list_order.status == 1 && list_order.bet == "d"
-                  //          ? '<span data-v-a9660e98="" class="success"> + ₹' + list_order.money * 2 + " </span>"
-                  //          : list_order.status == 1 && list_order.bet == "t"
-                  //            ? '<span data-v-a9660e98="" class="success"> + ₹' + list_order.money * 4.5 + " </span>"
-                  //            : list_order.status == 1 && list_order.result == 5 && list_order.bet == "x"
-                  //              ? '<span data-v-a9660e98="" class="success"> + ₹' + list_order.money * 1.5 + " </span>"
-                  //              : list_order.status == 1 && list_order.bet == "x"
-                  //                ? '<span data-v-a9660e98="" class="success"> + ₹' + list_order.money * 2 + " </span>"
-                  //                : list_order.status == 1 && list_order.bet == "l"
-                  //                  ? '<span data-v-a9660e98="" class="success"> + ₹' + list_order.money * 2 + " </span>"
-                  //                  : list_order.status == 1 && list_order.bet == "n"
-                  //                    ? '<span data-v-a9660e98="" class="success"> + ₹' + list_order.money * 2 + " </span>"
-                  //                    : list_order.status == 1
-                  //                      ? '<span data-v-a9660e98="" class="success"> + ₹' + list_order.money * 9 + " </span>"
-                  //                      : list_order.status == 2
-                  //                        ? '<span data-v-a9660e98="" class="fail"> - ₹' + list_order.money + ".00</span>"
-                  //                        : ""
-                  list_order.status === 1
-                    ? '<span data-v-a9660e98="" class="success"> + ₹ ' +
-                      parseFloat(list_order.get).toFixed(2) +
-                      " </span>"
-                    : '<span data-v-a9660e98="" class="fail"> - ₹ ' +
-                      parseFloat(list_order.money).toFixed(2) +
-                      "</span>"
-                }</span>
-                </div>`
-            }
+         <div data-v-373b3197="" class="MyGameRecordList__C-item" index="${index}" onclick="openGameBetDetails(${index})">
+               <div data-v-373b3197="" class="MyGameRecordList__C-item-l MyGameRecordList__C-item-${color}">${checkJoin}</div>
+               <div data-v-373b3197="" class="MyGameRecordList__C-item-m">
+                  <div data-v-373b3197="" class="MyGameRecordList__C-item-m-top">${list_order.stage}</div>
+                  <div data-v-373b3197="" class="MyGameRecordList__C-item-m-bottom">${timerJoin(list_order.time)}</div>
+               </div>
+              ${
+                list_order.status === 0
+                  ? ""
+                  : `
+                    <div data-v-373b3197="" class="MyGameRecordList__C-item-r ${list_order.status == 1 ? "success" : ""}">
+                        <div data-v-373b3197="" class="${list_order.status == 1 ? "success" : ""}">${list_order.status == 1 ? "Success" : list_order.status == 2 ? "Failed" : ""}</div>
+                        <span data-v-373b3197="">${list_order.status === 1 ? '<span data-v-a9660e98="" class="success"> + ₹ ' + parseFloat(list_order.get).toFixed(2) + " </span>" : '<span data-v-a9660e98="" class="fail"> - ₹ ' + parseFloat(list_order.money).toFixed(2) + "</span>"}</span>
+                  </div>`
+              }
          </div>
- <div data-v-2faec5cb="" class="MyGameRecordList__C-detail details_box_${index}" style="display: none;">
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-detail-text">Details</div>
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-detail-line">
-                  Order number
-                  <div data-v-2faec5cb="">${list_order.id_product} <img data-v-2faec5cb="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAhFBMVEUAAABRUVFQUFBRUVFRUVFRUVFRUVFRUVFQUFBRUVFQUFBRUVFQUFBQUFBRUVFRUVFSUlJSUlJRUVFQUFBSUlJRUVFRUVFRUVFRUVFRUVFRUVFQUFBRUVFRUVFRUVFRUVFQUFBRUVFRUVFRUVFQUFBQUFBQUFBSUlJYWFhJSUlQUFBRUVGJ3MxyAAAAK3RSTlMAv0B6VerZrqiblYmCaGJIOiQdFg/79vDl39TKxbq0oY9zblxONC4pCQTPqkRvegAAAWZJREFUeNrtz0duw0AQAEGSzjnnnIP+/z8ffJOBgRfgiCts9Qca1UmSNGZDP0FDN37DbIJAQH4DAQGJAwEBiQMBAYlbTsjQLWcgtQVSWyC1BVJbILUFUlsgtdUQZJiyMSGzKRsTclbwBQEpgJwXfEFACiAXBV8QkALIWsEXBKRFyGXBF2QKSD/k1WdCruYhXV4gTUHWQUBAQsg1CEgO5BukMsgNCEgO5BYEJAfSg4CAhJA7EJAcyD0ISA5kAwQEJIRsgoCAhJAHEJAcyBYICEgI2QYBAQkhjyAgOZAdEBCQELILAgISQlZAQEDagDyBgORAnkFAciB7ICAgIWQfBAQkhLyAgORAVkEWC+nnWlbI30Bqh7yCgORADkBAQMIGEBCQNiCHICAgYW8gIDmQdxCQHMgHCEgO5AgEBCTsGKRySGog/+ik4AsC0iLktOALAtIi5LPgCwJS0FfBFwSkpH7COkmSMvoBUQl8xsUGEfcAAAAASUVORK5CYII=" /></div>
-               </div>
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-detail-line">
-                  Period
-                  <div data-v-2faec5cb="">${list_order.stage}</div>
-               </div>
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-detail-line">
-                  Purchase amount
-                  <div data-v-2faec5cb="">₹${parseFloat(list_order.fee + list_order.money).toFixed(2)}</div>
-               </div>
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-detail-line">
-                  Quantity
-                  <div data-v-2faec5cb="">${parseFloat(list_order.amount).toFixed(2)}</div>
-               </div>
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-detail-line">
-                  Amount after tax
-                  <div data-v-2faec5cb="" class="red">₹${parseFloat(list_order.money).toFixed(2)}</div>
-               </div>
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-detail-line">
-                  Tax
-                  <div data-v-2faec5cb="">₹${parseFloat(list_order.fee).toFixed(2)}</div>
-               </div>
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-detail-line" style="display: ${list_order.status == 0 ? "none" : ""}">
-                  Result
-                  <div data-v-2faec5cb="" class="numList">
-                     ${list_order.result}
-                  </div>
-               </div>
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-detail-line">
-                  Select
-                  <div data-v-2faec5cb="">
-                     ${selected}
-                  </div>
-               </div>
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-detail-line" style="display:${list_order.status == 0 ? "none" : ""};">
-                  Status
-                  <div data-v-2faec5cb="" class="${list_order.status == 1 ? "green" : "red"}">${list_order.status == 1 ? "Success" : "Failed"}</div>
-               </div>
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-detail-line" style="display:${list_order.status == 0 ? "none" : ""};">
-                  Win/lose
-                  <div data-v-2faec5cb="" class="${list_order.status == 1 ? "green" : "red"}">${list_order.status == 1 ? `₹${list_order.get}` : `- ₹${list_order.fee + list_order.money}`}</div>
-               </div>
-               <div data-v-2faec5cb="" class="MyGameRecordList__C-detail-line">
-                  Order time
-                  <div data-v-2faec5cb="">${timerJoin(list_order.time)}</div>
+         <div data-v-373b3197="" class="MyGameRecordList__C-detail details_box_${index}" style="display: none;">
+            <div data-v-373b3197="" class="MyGameRecordList__C-detail-text">Details</div>
+            <div data-v-373b3197="" class="MyGameRecordList__C-detail-line">
+               Order number
+               <div data-v-373b3197="">${list_order.id_product} <img data-v-373b3197="" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAhFBMVEUAAABRUVFQUFBRUVFRUVFRUVFRUVFRUVFQUFBRUVFQUFBRUVFQUFBQUFBRUVFRUVFSUlJSUlJRUVFQUFBSUlJRUVFRUVFRUVFRUVFRUVFRUVFQUFBRUVFRUVFRUVFRUVFQUFBRUVFRUVFRUVFQUFBQUFBQUFBSUlJYWFhJSUlQUFBRUVGJ3MxyAAAAK3RSTlMAv0B6VerZrqiblYmCaGJIOiQdFg/79vDl39TKxbq0oY9zblxONC4pCQTPqkRvegAAAWZJREFUeNrtz0duw0AQAEGSzjnnnIP+/z8ffJOBgRfgiCts9Qca1UmSNGZDP0FDN37DbIJAQH4DAQGJAwEBiQMBAYlbTsjQLWcgtQVSWyC1BVJbILUFUlsgtdUQZJiyMSGzKRsTclbwBQEpgJwXfEFACiAXBV8QkALIWsEXBKRFyGXBF2QKSD/k1WdCruYhXV4gTUHWQUBAQsg1CEgO5BukMsgNCEgO5BYEJAfSg4CAhJA7EJAcyD0ISA5kAwQEJIRsgoCAhJAHEJAcyBYICEgI2QYBAQkhjyAgOZAdEBCQELILAgISQlZAQEDagDyBgORAnkFAciB7ICAgIWQfBAQkhLyAgORAVkEWC+nnWlbI30Bqh7yCgORADkBAQMIGEBCQNiCHICAgYW8gIDmQdxCQHMgHCEgO5AgEBCTsGKRySGog/+ik4AsC0iLktOALAtIi5LPgCwJS0FfBFwSkpH7COkmSMvoBUQl8xsUGEfcAAAAASUVORK5CYII=" /></div>
+            </div>
+            <div data-v-373b3197="" class="MyGameRecordList__C-detail-line">
+               Period
+               <div data-v-373b3197="">${list_order.stage}</div>
+            </div>
+            <div data-v-373b3197="" class="MyGameRecordList__C-detail-line">
+               Purchase amount
+               <div data-v-373b3197="">₹${parseFloat(list_order.fee + list_order.money).toFixed(2)}</div>
+            </div>
+            <div data-v-373b3197="" class="MyGameRecordList__C-detail-line">
+               Quantity
+               <div data-v-373b3197="">${parseFloat(list_order.amount).toFixed(2)}</div>
+            </div>
+            <div data-v-373b3197="" class="MyGameRecordList__C-detail-line">
+               Amount after tax
+               <div data-v-373b3197="" class="red">₹${parseFloat(list_order.money).toFixed(2)}</div>
+            </div>
+            <div data-v-373b3197="" class="MyGameRecordList__C-detail-line">
+               Tax
+               <div data-v-373b3197="">₹${parseFloat(list_order.fee).toFixed(2)}</div>
+            </div>
+            <div data-v-373b3197="" class="MyGameRecordList__C-detail-line" style="display: ${list_order.status == 0 ? "none" : ""}">
+               Result
+               <div data-v-373b3197="" class="numList">
+                  ${list_order.result}
                </div>
             </div>
+            <div data-v-373b3197="" class="MyGameRecordList__C-detail-line">
+               Select
+               <div data-v-373b3197="">
+                  ${selected}
+               </div>
+            </div>
+            <div data-v-373b3197="" class="MyGameRecordList__C-detail-line" style="display:${list_order.status == 0 ? "none" : ""};">
+               Status
+               <div data-v-373b3197="" class="${list_order.status == 1 ? "green" : "red"}">${list_order.status == 1 ? "Success" : "Failed"}</div>
+            </div>
+            <div data-v-373b3197="" class="MyGameRecordList__C-detail-line" style="display:${list_order.status == 0 ? "none" : ""};">
+               Win/lose
+               <div data-v-373b3197="" class="${list_order.status == 1 ? "green" : "red"}">${list_order.status == 1 ? `₹${list_order.get}` : `- ₹${list_order.fee + list_order.money}`}</div>
+            </div>
+            <div data-v-373b3197="" class="MyGameRecordList__C-detail-line">
+               Order time
+               <div data-v-373b3197="">${timerJoin(list_order.time)}</div>
+            </div>
+         </div>
          `;
     })
     .join(" ");
@@ -609,14 +573,9 @@ function initGameLogics({
       $(".Betting__Popup-body-money-main").attr("data-current-money"),
     );
     console.log($("#van-field-1-input").val());
-
+    console.log(money);
     let total = value * money;
-
-    if (isNumber(total)) {
-      $("#popup_total_bet_money").text(`₹ ${total.toFixed(2)}`);
-    } else {
-      $("#popup_total_bet_money").text(``);
-    }
+    $("#popup_total_bet_money").text(total + ".00");
   }
 
   const selectPopupXData = () => {};
@@ -630,7 +589,7 @@ function initGameLogics({
     $(".popup-join > div").addClass(`Betting__Popup-${cssValueNumber}`);
 
     let activeXData = $(".Betting__C-multiple-r.active").attr("data-x");
-
+    console.log(activeXData);
     $("#van-field-1-input").val(activeXData);
     $("div.Betting__Popup-body-x-btn").removeClass("bgcolor");
     $(`div.Betting__Popup-body-x-btn[data-x="${activeXData}"]`).addClass(
@@ -690,12 +649,10 @@ function initGameLogics({
     totalMoney();
   });
 
-  $(`#van-field-1-input`).off("input.quantity");
-  $(`#van-field-1-input`).on("input.quantity", function (e) {
+  $(`#van-field-1-input`).off("change.input");
+  $(`#van-field-1-input`).on("change.input", function (e) {
     e.preventDefault();
-    const currentX = $("#van-field-1-input").val()
-      ? parseInt($("#van-field-1-input").val())
-      : "";
+    const currentX = parseInt($("#van-field-1-input").val());
 
     $(".Betting__Popup-body-x-btn").removeClass("bgcolor");
     $(`.Betting__Popup-body-x-btn[data-x="${currentX}"]`).addClass("bgcolor");
@@ -728,18 +685,15 @@ function initGameLogics({
       success: function (response) {
         alertMessage(response.message);
         if (response.status === false) return;
-        $("#balance_amount").text(
-          `₹ ${formatIndianNumber(data.data.money_user)} `,
-        );
-
-        initMyBets();
-
-        // socket.emit("data-server_3", {
+        $("#balance_amount").text("₹ " + response.money + ".00");
+        // socket.emit("data-server_2", {
         //   money: currentX * money,
         //   join,
         //   time: Date.now(),
         //   change: response.change,
         // });
+
+        initMyBets();
       },
     });
 
@@ -1241,15 +1195,6 @@ function formateTimeHHmmss(params = "") {
   let seconds = formateT(date.getSeconds());
   return hours + ":" + minutes + ":" + seconds;
 }
-
-function formatIndianNumber(num) {
-  let formattedNum = new Intl.NumberFormat("en-IN", {
-    maximumFractionDigits: 2,
-    minimumFractionDigits: 2,
-  }).format(num);
-  return formattedNum;
-}
-
 var socket = io();
 var pageno = 0;
 var limit = 10;
@@ -1366,9 +1311,7 @@ socket.on("data-server-trx-wingo", async function (msg) {
           unsetCookie();
           return false;
         }
-        $("#balance_amount").text(
-          `₹ ${formatIndianNumber(data.data.money_user)} `,
-        );
+        $("#balance_amount").text(`₹ ${data.data.money_user}.00 `);
       });
 
     $(".Loading").fadeOut(0);

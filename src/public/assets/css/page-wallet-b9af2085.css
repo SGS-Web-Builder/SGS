@@ -28,7 +28,7 @@
 }
 
 .wallet-container-header[data-v-0dabd3fc] {
-    background: #213743;
+    background: var(--light-main_gradient-color, var(--bg_color_L2));
     width: 100%;
     color: #fff;
     padding-bottom: .32rem
@@ -139,7 +139,7 @@
     padding: .62667rem .18667rem .26667rem;
     font-family: bahnschrift;
     border-radius: .26667rem;
-    background-color: #1a2c38;
+    background-color: var(--darkBg, var(--bg_color_L2));
     width: 100%;
     margin-top: .32rem
 }
@@ -294,7 +294,7 @@
 .wallet-container-content .gameList>div[data-v-0dabd3fc] {
     width: 31%;
     min-height: 2.13333rem;
-    background-color: #1a2c38;
+    background-color: var(--darkBg, var(--bg_color_L2));
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
@@ -1016,7 +1016,7 @@
 }
 
 .Recharge__container-intro[data-v-7cba6004] {
-    background: #1a2c38;
+    background: var(--darkBg, var(--bg_color_L2));
     border-radius: .26667rem;
     padding: .33333rem .26667rem
 }
@@ -2277,7 +2277,7 @@ html:lang(ar) .Recharge__container-intro__lists .item p[data-v-7cba6004]:after {
 }
 
 .boxStyle[data-v-9e03166f] {
-    background: #1a2c38;
+    background: var(--darkBg, var(--bg_color_L2));
     border-radius: .26667rem;
     margin-top: .26667rem;
     padding: .4rem .29333rem .42667rem .26667rem;
@@ -3149,7 +3149,7 @@ html:lang(ar) .Recharge__content-paymoney__money-input .place-right[data-v-9e031
 .balanceAssets[data-v-98c90f53] {
     width: 100%;
     height: 3.46667rem;
-    background-image: url(/assets/png/TotalAssetsBg-2d289a9b.png);
+    background-image: linear-gradient(90deg, #3BAF4C 0%, #00D08A 100%);
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: center;
@@ -4512,7 +4512,7 @@ html[data-v-36cc3380]:lang(ar) .van-dialog__content .promptHeader:after {
     gap: .21333rem;
     padding: .32rem .13333rem;
     border-radius: .13333rem;
-    background-color: #1a2c38
+    background-color: var(--darkBg, var(--bg_color_L2))
 }
 
 .rechargeh__container-content__item-header[data-v-f851bd18] {
@@ -4760,7 +4760,7 @@ html[data-v-36cc3380]:lang(ar) .van-dialog__content .promptHeader:after {
     padding: 0;
     color: var(--text_color_L2) !important;
     border-radius: .13333rem;
-    background: #1a2c38;
+    background: var(--bgDark-2, var(--bg_color_L2));
     display: -webkit-box;
     display: -webkit-flex;
     display: flex;
@@ -5068,17 +5068,17 @@ html:lang(ar) .RechargeUsdt__container .rechage_active[data-v-a876fc5b] {
 }
 
 .transRecord__container .ar[data-v-2565e76d] {
-    background: #213743
+    background: var(--bg_color_L1)
 }
 
 .transRecord__container-content__card[data-v-2565e76d] {
-    background: #1a2c38;
+    background: var(--bg_color_L2);
     border-radius: .13333rem;
     margin-bottom: .34667rem
 }
 
 .transRecord__container-content__card-top[data-v-2565e76d] {
-    background: #1a2c38;
+    background: var(--light-main_gradient-color, var(--bg_color_L3));
     height: 1.17333rem;
     display: -webkit-box;
     display: -webkit-flex;
@@ -5104,7 +5104,7 @@ html:lang(ar) .RechargeUsdt__container .rechage_active[data-v-a876fc5b] {
 
 .transRecord__container-content__card-mid .line[data-v-2565e76d] {
     position: relative;
-    background-color: #213743;
+    background-color: var(--bg_color_L1);
     height: .8rem;
     padding: .21333rem .26667rem;
     display: -webkit-box;
@@ -5161,7 +5161,7 @@ html:lang(ar) .RechargeUsdt__container .rechage_active[data-v-a876fc5b] {
     resize: none;
     margin-bottom: .29333rem;
     font-size: .29333rem;
-    background-color: #1a2c38;
+    background-color: var(--bg_color_L2);
     color: var(--text_color_L2)
 }
 
@@ -5205,7 +5205,7 @@ html:lang(ar) .RechargeUsdt__container .rechage_active[data-v-a876fc5b] {
 .balanceAssets[data-v-0879c174] {
     width: 100%;
     height: 3.46667rem;
-    background-image: url(/assets/png/TotalAssetsBg-2d289a9b.png);
+    background-image: linear-gradient(90deg, #3BAF4C 0%, #00D08A 100%);
     background-repeat: no-repeat;
     background-size: 100%;
     background-position: center;
@@ -5567,7 +5567,7 @@ html:lang(ar) .balanceAssets__tip img[data-v-0879c174] {
 
 .withdrawWay>div[data-v-9bae072d]:not(.c2c) {
     border-radius: .13333rem;
-    background: #1a2c38;
+    background: var(--bgDark-2, var(--bg_color_L2));
     width: 31%;
     height: 2.13333rem;
     padding: .26667rem;
@@ -5652,7 +5652,7 @@ h6.red[data-v-cb5583fe] {
 }
 
 .explain[data-v-cb5583fe] {
-    background: #1a2c38;
+    background: var(--darkBg, var(--bg_color_L2));
     box-shadow: var(--BoxShadowColor-9);
     border-radius: .26667rem .26667rem 0 0;
     padding: .33333rem .26667rem 0
@@ -5662,7 +5662,7 @@ h6.red[data-v-cb5583fe] {
     -webkit-box-pack: justify;
     -webkit-justify-content: space-between;
     justify-content: space-between;
-    background: #213743;
+    background: var(--bg_color_L1);
     border-radius: .8rem;
     height: 1.17333rem;
     padding: .26667rem;
@@ -5913,7 +5913,7 @@ html:lang(ar) .explain .input .place-div[data-v-cb5583fe]:after {
 }
 
 .addWithdrawType-top[data-v-ef5c8333] {
-    background: #1a2c38;
+    background: var(--darkBg, var(--bg_color_L2));
     border-radius: .13333rem;
     height: 2.66667rem;
     display: -webkit-box;
@@ -6001,7 +6001,7 @@ html:lang(ar) .explain .input .place-div[data-v-cb5583fe]:after {
 }
 
 .Recharge__container-intro[data-v-76eb7f31] {
-    background: #1a2c38;
+    background: var(--darkBg, var(--bg_color_L2));
     border-radius: 0 0 .26667rem .26667rem;
     padding: .33333rem .26667rem
 }
@@ -7747,7 +7747,7 @@ html:lang(ar) .explain .input .place-div[data-v-cb5583fe]:after {
     text-align: center;
     padding: .4rem 0;
     max-width: 10rem;
-    background: #213743;
+    background: var(--darkBg, var(--bg_color_L2));
     border-radius: 0;
     margin-bottom: 0
 }

@@ -1,4 +1,5 @@
 import axios from "axios";
+import crypto from "crypto";
 import connection from "../config/connectDB.js";
 import aesUtil from "../helpers/AESEncrypt.js";
 
@@ -50,7 +51,7 @@ const gameCategoriesPage = (GameTagId) => async (req, res) => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${process.env.APP_BASE_URL}/jdb_game_list.json`,
+      url: "https://webghost.api-jetx.online/api/neo_jdb/game_list",
     });
 
     const tagName = tagList.find((item) => item.id === GameTagId)?.name;
@@ -89,7 +90,7 @@ const gameSlotsPage = (GameTagId) => async (req, res) => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${process.env.APP_BASE_URL}/jdb_game_list.json`,
+      url: "https://webghost.api-jetx.online/api/neo_jdb/game_list",
     });
 
     const tagName = tagList.find((item) => item.id === GameTagId)?.name;
@@ -121,7 +122,7 @@ const gameQuickPopularList = async (req, res) => {
   try {
     const response = await axios({
       method: "GET",
-      url: `${process.env.APP_BASE_URL}/jdb_game_list.json`,
+      url: "https://webghost.api-jetx.online/api/neo_jdb/game_list",
     });
 
     const tagName = tagList.find((item) => item.id === 7)?.name;
@@ -146,68 +147,81 @@ const gameQuickPopularList = async (req, res) => {
   }
 };
 
+
+//Helper function to encrypt data
+const encryptData = (data, key, iv) => {
+    const cipher = crypto.createCipheriv('aes-128-cbc', Buffer.from(key), Buffer.from(iv));
+    let encrypted = cipher.update(data, 'utf8', 'base64');
+    encrypted += cipher.final('base64');
+    return encrypted.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+};
+
 const generateGameLink = async (req, res) => {
   try {
-    let token = req.cookies.auth;
-    let gType = req.query.g_type;
-    let mType = req.query.m_type;
-
-    const [rows] = await connection.execute(
-      "SELECT `token`, `status`, `phone` , `money` FROM `users` WHERE `token` = ? AND `veri` = 1",
-      [token],
-    );
-
-    if (rows.length === 0) {
-      return res.status(400).json({
-        message: "Login is required to access this api",
+    const token = req.cookies.auth; // Check if token exists
+    if (!token) {
+      return res.status(401).json({
+        message: "Login is required to access this API",
         isAuthorized: false,
       });
     }
 
+    const gType = req.query.g_type;
+    const mType = req.query.m_type;
+
+    // Check if gType and mType are provided
     if (!gType || !mType) {
       return res.status(400).json({
-        message: "gType and mType is required!",
+        message: "gType and mType are required!",
         isAuthorized: true,
       });
     }
 
-    const response = await axios({
-      method: "GET",
-      url: `${process.env.BYTE_FUSION_API_URL}/api/neo_jdb/generate_link`,
-      data: {
-        parent: agentId,
-        uid: rows?.[0]?.phone,
-        balance: rows?.[0]?.money,
-        gType: gType,
-        mType: mType,
-        windowMode: "2",
-        key: key,
-        iv: iv,
-        dc: dc,
-        url: API_URL,
-      },
-    });
+    // Query the database for the user
+    const [rows] = await connection.execute(
+      "SELECT token, status, phone FROM users WHERE token = ? AND veri = 1",
+      [token]
+    );
 
-    const status = response.data.status;
-
-    if (status === "0000") {
-      return res.redirect(response?.data?.path);
+    // Check if user exists
+    if (rows.length === 0) {
+      return res.status(401).json({
+        message: "Invalid token or user not verified",
+        isAuthorized: false,
+      });
     }
 
-    console.log(response?.data);
-    return res.status(400).json({
-      message: "Something went wrong!",
-      data: response?.data,
-      isAuthorized: true,
+    const mobile = rows[0].phone; // Get the user's phone number
+
+    // Call external API to get the game link
+    const response = await axios.post("http://webghost.api-jetx.online/postjdb", {
+      Mobile: mobile,
+      gType: gType,
+      mType: mType,
+      ReferrerUrl: process.env.JDB_GAME_BASE_URL,
     });
+
+    if (!response.data.generatedUrl) {
+      return res.status(500).json({
+        message: "Failed to generate game link",
+        isAuthorized: true,
+      });
+    }
+
+    console.log("Generated URL:", response.data.generatedUrl);
+
+    // Redirect to the generated URL
+    return res.redirect(response.data.generatedUrl);
+
   } catch (error) {
-    console.log(error);
-    console.log(error?.response?.data);
+    console.error("Error generating game link:", error);
     return res.status(500).json({
-      message: "Something went wrong!",
+      message: "An error occurred while generating the game link",
+      error: error.message,
     });
   }
 };
+
 
 const mainFunction = async (req, res) => {
   try {
@@ -219,8 +233,6 @@ const mainFunction = async (req, res) => {
         err_text: "x is required for jdb!",
       });
     }
-
-    console.log(req.body);
 
     const response = aesUtil.AesDecrypt(x, key, iv);
     const data = JSON.parse(response);
@@ -279,7 +291,6 @@ const betNSettle = async ({ data, user, res }) => {
   const gType = data.gType;
   const bet = Number(data.bet);
   const win = Number(data.win);
-  const netWin = Number(data.netWin);
   const denom = data.denom;
 
   const userMoney = Number(user.money);
@@ -294,31 +305,9 @@ const betNSettle = async ({ data, user, res }) => {
 
   if (passBet) {
     const finalAmount = Number(userMoney + bet + win).toFixed(2);
-
     await connection.query(
       "UPDATE users SET money = ?, total_money = ? WHERE `phone` = ?",
       [finalAmount, finalAmount, user.phone],
-    );
-
-    await connection.query(
-      "INSERT INTO jdb_bets (phone, mType, gType, bet_amount, win_amount, net_win_amount, tax_amount, commission_amount, bet_id, bet_time, report_date, initial_balance, final_balance, status, time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      [
-        user.phone,
-        data.mType,
-        data.gType,
-        bet,
-        win,
-        netWin,
-        0,
-        0,
-        data.transferId,
-        data.gameDate,
-        data.reportDate,
-        userMoney,
-        finalAmount,
-        1,
-        new Date().getTime(),
-      ],
     );
 
     return res.status(200).json({
@@ -354,27 +343,6 @@ const bet = async ({ data, user, res }) => {
       [amount, amount, user.phone],
     );
 
-    await connection.query(
-      "INSERT INTO jdb_bets (phone, mType, gType, bet_amount, win_amount, net_win_amount, tax_amount, commission_amount, bet_id, bet_time, report_date, initial_balance, final_balance, status, time) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-      [
-        user.phone,
-        data.mType,
-        data.gType,
-        amount,
-        0,
-        0,
-        0,
-        0,
-        data.transferId,
-        data.gameDate,
-        data.reportDate,
-        userMoney,
-        finalAmount,
-        0,
-        new Date().getTime(),
-      ],
-    );
-
     const cUser = await getUserDataByAuthPhoneNumber(user.phone);
 
     return res.status(200).json({
@@ -401,15 +369,6 @@ const settle = async ({ data, user, res }) => {
     [amount, amount, user.phone],
   );
 
-  const betIds = data.refTransferIds;
-
-  for (const betId of betIds) {
-    await connection.query(
-      "UPDATE jdb_bets SET win_amount = ?, net_win_amount = ?, tax_amount = ?, commission_amount = ?, final_balance = ?, status = ? WHERE `bet_id` = ?",
-      [data.win, data.netWin, data.tax, data.commission, finalAmount, 1, betId],
-    );
-  }
-
   return res.status(200).json({
     status: "0000",
     balance: finalAmount,
@@ -425,11 +384,6 @@ const cancelBet = async ({ data, user, res }) => {
   await connection.query(
     "UPDATE users SET money = money + ?, total_money = total_money + ? WHERE `phone` = ?",
     [amount, amount, user.phone],
-  );
-
-  await connection.query(
-    "UPDATE jdb_bets SET win_amount = ?, net_win_amount = ?, tax_amount = ?, commission_amount = ?, final_balance = ?, status = ? WHERE `bet_id` = ?",
-    [0, 0, 0, 0, finalAmount, 2, data.gameRoundSeqNo],
   );
 
   return res.status(200).json({

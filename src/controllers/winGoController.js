@@ -930,19 +930,12 @@ const addWinGo = async (game) => {
             ),
         );
 
-        const highestBet =
+        const lowestBet =
           availableBets.length > 0
             ? availableBets[0]
-            : Math.max(...betsForCategory);
-        amount = highestBet;
+            : Math.min(...betsForCategory);
+        amount = lowestBet;
       }
-      
-      // const lowestBet =
-       //   availableBets.length > 0
-        //    ? availableBets[0]
-         //   : Math.min(...betsForCategory);
-      //  amount = lowestBet;
-    //  }
 
       let nextResult = "";
       if (game == 30) nextResult = setting[0].wingo30;

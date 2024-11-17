@@ -1381,7 +1381,7 @@ textarea {
   background: -webkit-linear-gradient(353deg, #f2d5b2 9.64%, #d9b38c 84.03%);
   background: var(--main_gradient-color);
   box-shadow: unset;
-  color: #171717;
+  color: #fff;
 }
 #app .content {
   background-color: #fff !important;

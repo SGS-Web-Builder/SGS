@@ -9,7 +9,13 @@
         integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer">
         </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.14.0/jquery-ui.min.js"
+        integrity="sha512-MlEyuwT6VkRXExjj8CdBKNgd+e2H+aYZOCUaCrt9KRk6MlZDOs91V1yK22rwm8aCIsb5Ec1euL8f0g58RKT/Pg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 </head>
+
 
 <body>
     <style>
@@ -174,13 +180,13 @@
             padding: 10px;
             user-select: none;
             font: inherit;
-            color: #61a9ff;
+            color: #896646;
             font-size: 1rem;
             font-weight: 700;
             letter-spacing: .01333rem;
             border: none;
             border-radius: 99rem;
-            background: linear-gradient(131deg, #f2d5b2 0%, #22275b 100%);
+            background: linear-gradient(131deg, #f2d5b2 0%, #d9b38c 100%);
         }
 
         .upi_pay_now {
@@ -241,7 +247,8 @@
 
         <form class="verification_form__root" action="submit.php" method="post">
             <label for="upi_ref_no">UPI Ref. No.</label>
-            <input type="text" id="upi_ref_no" name="upi_ref_no" required placeholder="Enter Your UTR here..." />
+            <input min="12" type="text" id="upi_ref_no" name="upi_ref_no" required
+                placeholder="Enter Your UTR here..." />
             <button id="submit_button" type="submit">Submit</button>
         </form>
 
@@ -283,7 +290,58 @@
             <p></p>
         </footer>
     </main>
+    <style>
+        .message_alert_root {
 
+            font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Segoe UI, Arial, Roboto, PingFang SC, Hiragino Sans GB, Microsoft Yahei, sans-serif;
+            font-size: 12px;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+            max-width: 12.8rem;
+            width: 80%;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 100000;
+            border-radius: 14px;
+        }
+
+        .message_alert_text {
+            font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Segoe UI, Arial, Roboto, PingFang SC, Hiragino Sans GB, Microsoft Yahei, sans-serif;
+            margin: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+            transition: opacity .5s;
+            animation: bounce-in-data-v-1dcba851 .5s;
+            position: relative;
+            padding: .32rem .66667rem;
+            text-align: center;
+            line-height: 1.5rem;
+            overflow: hidden;
+            font-size: 1rem;
+            color: #fff;
+            background-color: rgba(0, 0, 0, .8);
+        }
+
+        @keyframes bounce-in-data-v-1dcba851 {
+            0% {
+                transform: scale(.4)
+            }
+
+            50% {
+                transform: scale(1.03)
+            }
+
+            to {
+                transform: scale(1)
+            }
+        }
+    </style>
     <script>
         const copyUpiId = document.getElementById("copy_upi_id");
 
@@ -303,11 +361,11 @@
         const alertMessage = (text) => {
             const msg = document.createElement('div');
             msg.setAttribute('data-v-1dcba851', '');
-            msg.className = 'msg';
+            msg.className = 'message_alert_root';
 
             const msgContent = document.createElement('div');
             msgContent.setAttribute('data-v-1dcba851', '');
-            msgContent.className = 'msg-content v-enter-active v-enter-to';
+            msgContent.className = 'message_alert_text';
             msgContent.style = '';
             msgContent.textContent = text;
 
@@ -331,8 +389,18 @@
 
 
                 event.preventDefault();
-                const upiRefNo = document.getElementById("upi_ref_no").value;
+                const upiRefNo = $('#upi_ref_no').val();
                 const amount = '<%=Amount%>';
+
+                if (!upiRefNo) {
+                    alertMessage("Please Enter UPI Ref. No.")
+                    return
+                }
+
+                if (upiRefNo.length !== 12) {
+                    alertMessage("Please Enter Valid UPI Ref. No.")
+                    return
+                }
 
                 const response = await axios.post("/wallet/paynow/manual_upi_request", {
                     money: amount,
@@ -354,7 +422,7 @@
                 window.location.href = "/wallet/rechargerecord"
             } catch (error) {
                 console.log(error);
-                alertMessage("Something went Wrong!")
+                alertMessage(error.response?.data?.message)
             }
         });
     </script>

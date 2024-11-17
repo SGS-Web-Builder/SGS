@@ -10,7 +10,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
    <link rel="manifest">
-   <title>Taaz 777</title>
+   <title>Duiwin</title>
 
    <link rel="stylesheet" href="/assets/css/modules-b642e9bc.css">
    <link rel="stylesheet" href="/assets/css/page-activity-4fe5c6bf.css">
@@ -4517,9 +4517,9 @@
                              </div>
                          </div>-->
 
-                         <!------<div class="account_change_info" onclick="handleOpenAddMethod()">
+                         <div class="account_change_info" onclick="handleOpenAddMethod()">
                              Change Bank Card Information
-                         </div>----->
+                         </div>
                      </div
                  `;
          } else {
@@ -4640,9 +4640,9 @@
       inputMoney = parseInt(MoneyAmountInput.value);
 
       if (inputMoney >= currentWithdrawalMethod.getAttribute("type") === WithdrawalMethodsMap.BANK_CARD ? MINIMUM_WITHDRAWAL_MONEY_INR : MINIMUM_WITHDRAWAL_MONEY_USDT) {
-         $("#submit_withdraw_btn").css("background", "linear-gradient(180deg, #2AAAF3 0%, #2979F2 100%)").prop("disabled", false);
+         $("#submit_withdraw_btn").css("background", "linear-gradient(90deg, #3BAF4C 0%, #00D08A 100%)").prop("disabled", false);
       } else {
-         $("#submit_withdraw_btn").css("background", "linear-gradient(180deg, #cfd1de 0%, #c7c9d9 100%)").prop("disabled", true);
+         $("#submit_withdraw_btn").css("background", "linear-gradient(90deg, #3BAF4C 0%, #00D08A 100%)").prop("disabled", true);
       }
    };
    handleMoneyAmountInput()

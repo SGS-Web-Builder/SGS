@@ -641,6 +641,16 @@ const GetMyEmerdList = async (req, res) => {
   });
 };
 
+function minutesPassedSince(time) {
+  const inputTime = moment(time);
+  const minutesDiff = moment().diff(inputTime, "minutes");
+  return minutesDiff;
+}
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 const generateResultByHash = (hash) => {
   const hashItemList = hash.split("");
 
@@ -658,6 +668,13 @@ const generateResultByHash = (hash) => {
 
   return Result;
 };
+
+function getNthMinuteSinceDayStart() {
+  const now = moment();
+  const startOfDay = moment().startOf("day");
+  const diff = now.diff(startOfDay, "minutes");
+  return diff;
+}
 
 const addTrxWingo = async (game) => {
   try {
@@ -702,7 +719,7 @@ const addTrxWingo = async (game) => {
               timeSS: moment(item.timestamp).format("ss"),
             };
           })
-          .find((item) => item.timeSS === process.env.TRX_WINGO_GAME_TIME_SS);
+          .find((item) => item.timeSS === "54");
 
         if (NextBlock === undefined) {
           throw new Error("NextBlock is undefined");
@@ -742,14 +759,8 @@ const addTrxWingo = async (game) => {
       }
     }
 
-    let minutes;
-    if (game == 1) minutes = 1;
-    if (game == 3) minutes = 3;
-    if (game == 5) minutes = 5;
-    if (game == 10) minutes = 10;
-
     let gameRepresentationId = GameRepresentationIds.TRXWINGO[game];
-    let NewGamePeriod = generatePeriod(gameRepresentationId, minutes);
+    let NewGamePeriod = generatePeriod(gameRepresentationId);
 
     let timeNow = Date.now();
 
@@ -792,28 +803,103 @@ const handlingTrxWingo1P = async (typeid) => {
       return;
     }
 
+    // update ket qua
     await connection.query(
       "UPDATE trx_wingo_bets SET result = ? WHERE status = 0 AND game = ?",
       [trxWingoNow[0].result, game],
     );
 
     let result = Number(trxWingoNow[0].result);
+    switch (result) {
+      case 0:
+        await connection.query(
+          'UPDATE trx_wingo_bets SET status = 2 WHERE status = 0 AND game = ? AND bet NOT IN ("l", "n", "d", "0", "t")',
+          [game],
+        );
+        break;
+      case 1:
+        await connection.query(
+          'UPDATE trx_wingo_bets SET status = 2 WHERE status = 0 AND game = ? AND bet NOT IN ("l", "n", "x", "1")',
+          [game],
+        );
+        break;
+      case 2:
+        await connection.query(
+          'UPDATE trx_wingo_bets SET status = 2 WHERE status = 0 AND game = ? AND bet NOT IN ("l", "n", "d", "2")',
+          [game],
+        );
+        break;
+      case 3:
+        await connection.query(
+          'UPDATE trx_wingo_bets SET status = 2 WHERE status = 0 AND game = ? AND bet NOT IN ("l", "n", "x", "3")',
+          [game],
+        );
+        break;
+      case 4:
+        await connection.query(
+          'UPDATE trx_wingo_bets SET status = 2 WHERE status = 0 AND game = ? AND bet NOT IN ("l", "n", "d", "4")',
+          [game],
+        );
+        break;
+      case 5:
+        await connection.query(
+          'UPDATE trx_wingo_bets SET status = 2 WHERE status = 0 AND game = ? AND bet NOT IN ("l", "n", "x", "5", "t")',
+          [game],
+        );
+        break;
+      case 6:
+        await connection.query(
+          'UPDATE trx_wingo_bets SET status = 2 WHERE status = 0 AND game = ? AND bet NOT IN ("l", "n", "d", "6")',
+          [game],
+        );
+        break;
+      case 7:
+        await connection.query(
+          'UPDATE trx_wingo_bets SET status = 2 WHERE status = 0 AND game = ? AND bet NOT IN ("l", "n", "x", "7")',
+          [game],
+        );
+        break;
+      case 8:
+        await connection.query(
+          'UPDATE trx_wingo_bets SET status = 2 WHERE status = 0 AND game = ? AND bet NOT IN ("l", "n", "d", "8")',
+          [game],
+        );
+        break;
+      case 9:
+        await connection.query(
+          'UPDATE trx_wingo_bets SET status = 2 WHERE status = 0 AND game = ? AND bet NOT IN ("l", "n", "x", "9")',
+          [game],
+        );
+        break;
+      default:
+        break;
+    }
 
-    await batchUpdateBetStatus(result, game);
+    if (result < 5) {
+      await connection.query(
+        'UPDATE trx_wingo_bets SET status = 2 WHERE status = 0 AND game = ? AND bet = "l"',
+        [game],
+      );
+    } else {
+      await connection.query(
+        'UPDATE trx_wingo_bets SET status = 2 WHERE status = 0 AND game = ? AND bet = "n"',
+        [game],
+      );
+    }
 
+    // lấy ra danh sách đặt cược chưa xử lý
     const [order] = await connection.query(
       "SELECT * FROM trx_wingo_bets WHERE status = 0 AND game = ?",
       [game],
     );
-
     for (let i = 0; i < order.length; i++) {
       let orders = order[i];
-      let id = orders.id;
       let result = orders.result;
       let bet = orders.bet;
       let total = orders.money;
+      let id = orders.id;
       let phone = orders.phone;
-      let winAmount = calculateWinAmount(bet, result, total);
+      var nhan_duoc = 0;
       // x - green
       // t - Violet
       // d - red
@@ -823,22 +909,87 @@ const handlingTrxWingo1P = async (typeid) => {
       // Aur red aur green pe *2
       // 1,2,3,4,6,7,8,9
 
+      if (bet == "l" || bet == "n") {
+        nhan_duoc = total * 2;
+      } else {
+        if (result == 0 || result == 5) {
+          if (bet == "d" || bet == "x") {
+            nhan_duoc = total * 1.5;
+          } else if (bet == "t") {
+            nhan_duoc = total * 4.5;
+          } else if (bet == "0" || bet == "5") {
+            nhan_duoc = total * 4.5;
+          }
+        } else {
+          if (result == 1 && bet == "1") {
+            nhan_duoc = total * 9;
+          } else {
+            if (result == 1 && bet == "x") {
+              nhan_duoc = total * 2;
+            }
+          }
+          if (result == 2 && bet == "2") {
+            nhan_duoc = total * 9;
+          } else {
+            if (result == 2 && bet == "d") {
+              nhan_duoc = total * 2;
+            }
+          }
+          if (result == 3 && bet == "3") {
+            nhan_duoc = total * 9;
+          } else {
+            if (result == 3 && bet == "x") {
+              nhan_duoc = total * 2;
+            }
+          }
+          if (result == 4 && bet == "4") {
+            nhan_duoc = total * 9;
+          } else {
+            if (result == 4 && bet == "d") {
+              nhan_duoc = total * 2;
+            }
+          }
+          if (result == 6 && bet == "6") {
+            nhan_duoc = total * 9;
+          } else {
+            if (result == 6 && bet == "d") {
+              nhan_duoc = total * 2;
+            }
+          }
+          if (result == 7 && bet == "7") {
+            nhan_duoc = total * 9;
+          } else {
+            if (result == 7 && bet == "x") {
+              nhan_duoc = total * 2;
+            }
+          }
+          if (result == 8 && bet == "8") {
+            nhan_duoc = total * 9;
+          } else {
+            if (result == 8 && bet == "d") {
+              nhan_duoc = total * 2;
+            }
+          }
+          if (result == 9 && bet == "9") {
+            nhan_duoc = total * 9;
+          } else {
+            if (result == 9 && bet == "x") {
+              nhan_duoc = total * 2;
+            }
+          }
+        }
+      }
       const [users] = await connection.query(
         "SELECT `money` FROM `users` WHERE `phone` = ?",
         [phone],
       );
-
-      let totals = parseFloat(users[0].money) + parseFloat(winAmount);
-
+      let totals = parseFloat(users[0].money) + parseFloat(nhan_duoc);
       await connection.query(
         "UPDATE `trx_wingo_bets` SET `get` = ?, `status` = 1 WHERE `id` = ?",
-        [parseFloat(winAmount), id],
+        [parseFloat(nhan_duoc), id],
       );
-
-      await connection.query(
-        "UPDATE `users` SET `money` = ? WHERE `phone` = ?",
-        [totals, phone],
-      );
+      const sql = "UPDATE `users` SET `money` = ? WHERE `phone` = ?";
+      await connection.query(sql, [totals, phone]);
     }
 
     await connection.query(
@@ -848,134 +999,6 @@ const handlingTrxWingo1P = async (typeid) => {
   } catch (error) {
     console.log(error);
   }
-};
-
-const batchUpdateBetStatus = async (result, game) => {
-  const validBets = getValidBets(result);
-  const batchSize = 1000;
-  let offset = 0;
-  const maxRetries = 3;
-  let attempt = 0;
-
-  while (true) {
-    let rows;
-    while (attempt < maxRetries) {
-      try {
-        [rows] = await connection.execute(
-          `UPDATE trx_wingo_bets SET status = 2 
-           WHERE status = 0 AND game = ? AND bet NOT IN (${validBets.map(() => "?").join(",")})
-           LIMIT ${batchSize}`,
-          [game, ...validBets],
-        );
-
-        break;
-      } catch (error) {
-        if (error.code === "ER_LOCK_DEADLOCK") {
-          attempt++;
-          console.log(
-            `Deadlock detected, retrying transaction... Attempt ${attempt}`,
-          );
-          await new Promise((resolve) => setTimeout(resolve, 1000 * attempt));
-        } else {
-          throw error;
-        }
-      }
-    }
-
-    if (rows.affectedRows === 0) break;
-    offset += batchSize;
-  }
-};
-
-const getValidBets = (result) => {
-  result = Number(result);
-
-  const baseValidBets = [result.toString()];
-
-  if (result % 2 === 0) baseValidBets.push("d");
-  else baseValidBets.push("x");
-
-  if (result === 0 || result === 5) baseValidBets.push("t");
-
-  if (result <= 4) baseValidBets.push("n");
-  else baseValidBets.push("l");
-
-  return baseValidBets;
-};
-
-const calculateWinAmount = (bet, result, total) => {
-  let winAmount = 0;
-  if (bet == "l" || bet == "n") {
-    winAmount = total * 2;
-  } else {
-    if (result == 0 || result == 5) {
-      if (bet == "d" || bet == "x") {
-        winAmount = total * 1.5;
-      } else if (bet == "t") {
-        winAmount = total * 4.5;
-      } else if (bet == "0" || bet == "5") {
-        winAmount = total * 4.5;
-      }
-    } else {
-      if (result == 1 && bet == "1") {
-        winAmount = total * 9;
-      } else {
-        if (result == 1 && bet == "x") {
-          winAmount = total * 2;
-        }
-      }
-      if (result == 2 && bet == "2") {
-        winAmount = total * 9;
-      } else {
-        if (result == 2 && bet == "d") {
-          winAmount = total * 2;
-        }
-      }
-      if (result == 3 && bet == "3") {
-        winAmount = total * 9;
-      } else {
-        if (result == 3 && bet == "x") {
-          winAmount = total * 2;
-        }
-      }
-      if (result == 4 && bet == "4") {
-        winAmount = total * 9;
-      } else {
-        if (result == 4 && bet == "d") {
-          winAmount = total * 2;
-        }
-      }
-      if (result == 6 && bet == "6") {
-        winAmount = total * 9;
-      } else {
-        if (result == 6 && bet == "d") {
-          winAmount = total * 2;
-        }
-      }
-      if (result == 7 && bet == "7") {
-        winAmount = total * 9;
-      } else {
-        if (result == 7 && bet == "x") {
-          winAmount = total * 2;
-        }
-      }
-      if (result == 8 && bet == "8") {
-        winAmount = total * 9;
-      } else {
-        if (result == 8 && bet == "d") {
-          winAmount = total * 2;
-        }
-      }
-      if (result == 9 && bet == "9") {
-        winAmount = total * 9;
-      } else {
-        if (result == 9 && bet == "x") {
-          winAmount = total * 2;
-        }
-      }
-    }
-  }
-  return winAmount;
 };
 
 const trxWingoController = {
@@ -992,3 +1015,4 @@ const trxWingoController = {
 };
 
 export default trxWingoController;
+//developer by - SGS Web Builder
